@@ -1,0 +1,6 @@
+AllCops:
+  Exclude:
+    - 'Gemfile*'
+
+LineLength:
+  Max: 120
