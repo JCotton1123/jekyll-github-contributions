@@ -8,6 +8,6 @@ RuboCop::RakeTask.new(:rubocop) do |task|
 end
 
 desc 'Build the gem'
-task :build => :sanity do
+task build: :sanity do
   sh 'gem', 'build', *Dir['*.gemspec']
 end

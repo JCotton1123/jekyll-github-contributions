@@ -6,30 +6,36 @@ module Jekyll
   # Generates a github contributions data file
   class GithubContributionsGenerator < Jekyll::Generator
     DATA_FILE = '_data/github-contributions.json'.freeze
-    CONTRIBUTIONS_API_URL = 'https://api.github.com/search/issues?q=type:pr+is:merged+author:%s&per_page=100'.freeze
+    GITHUB_API_HOST = 'api.github.com'.freeze
+    CONTRIBUTIONS_URL = '/search/issues?q=type:pr+is:merged+author:%s&per_page=100&page=%i'.freeze
 
     def generate(site)
-      settings = site.config['githubcontributions']
+      settings = {
+        'cache' => 300,
+        'page_limit' => 10
+      }.merge(site.config['githubcontributions'])
 
       return if File.exist?(DATA_FILE) && (File.mtime(DATA_FILE) + settings['cache']) > Time.now
+      Jekyll.logger.info 'Generating Github contributions data file'
 
       contributions = []
 
-      contributions_url = format(CONTRIBUTIONS_API_URL, settings['username'])
+      client = Net::HTTP.new(GITHUB_API_HOST, 443)
+      client.use_ssl = true
 
-      Jekyll.logger.info 'Generating Github contributions data file'
       page = 1
       loop do
-        response = Net::HTTP.get_response(URI(contributions_url + '&page=' + page.to_s))
-
+        url = format(CONTRIBUTIONS_URL, settings['username'], page)
+        response = client.get(url, 'Accept' => 'application/json')
         if response.code != '200'
-          Jekyll.logger.warn "Cound not retrieve Github contribution data: #{response.body}"
+          Jekyll.logger.warn "Cound not retrieve Github data: #{response.body}"
           return
         end
 
         results = JSON.parse(response.body)
         contributions.concat(results['items'])
 
+        break if page >= settings['page_limit'].to_i
         break if contributions.length >= results['total_count']
         page += 1
       end

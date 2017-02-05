@@ -11,6 +11,17 @@ B/c Github API rate limits anonymous API requests pretty aggressively.
 * Add `jekyll-github-contributions` to your Jekyll Gemfile
 * Add `jekyll-github-contributions` to the gems list within Jekyll's `_config.yml`
 
+## Config
+
+Add the following to `_config.yml` and adjust as desired:
+
+```
+githubcontributions:
+  username: JCotton1123 # Github username
+  page_limit: 3 # Number of pages of data to grab from Github
+  cache: 300 # Number of seconds to cache the data file
+```
+
 ## Usage
 
 Within a page, post, or layout:

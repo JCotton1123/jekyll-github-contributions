@@ -2,5 +2,17 @@ AllCops:
   Exclude:
     - 'Gemfile*'
 
+Style/FileName:
+  Enabled: false
+
 LineLength:
   Max: 120
+
+Metrics/MethodLength:
+  Max: 100
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/AbcSize:
+  Max: 50

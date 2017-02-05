@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'jekyll-github-contributions'
-  s.version     = '0.1.0'
+  s.version     = '0.1.1'
   s.summary     = 'Jekyll generator plugin that generates a Github contributions data file'
   s.description = File.read('README.md')
   s.license     = 'Apache 2'
